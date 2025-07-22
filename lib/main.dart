@@ -387,7 +387,7 @@ class RentPaymentSection extends StatelessWidget {
                           letterSpacing: 0.2,
                         ),
                         children: [
-                          TextSpan(text: 'Pay Your '),
+                          TextSpan(text: 'Pay Yoursssss '),
                           TextSpan(
                             text: 'Rent ',
                             style: TextStyle(color: Color(0xFF1355A6)),
