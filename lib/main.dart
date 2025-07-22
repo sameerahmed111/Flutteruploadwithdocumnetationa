@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       );
                                     },
                                     child: const Text(
-                                      'Pay your annual rent monthly with our credit or debit card.',
+                                      'Pay your annual rent monthly with our credit or debit cardssssss.',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
