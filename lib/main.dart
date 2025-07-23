@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
+import 'animations.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -638,6 +641,26 @@ class RentPaymentSection extends StatelessWidget {
 class PaymentBenefitsSection extends StatelessWidget {
   const PaymentBenefitsSection({super.key});
 
+  // Data for the benefit cards
+  final List<Map<String, String>> _benefitCardsData = const [
+    {
+      'imageUrl': 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+      'title': 'Cash flow Freedom',
+      'subtitle': 'Keep more of your cash every month',
+    },
+    {
+      'imageUrl': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+      'title': 'Set it and forget it',
+      'subtitle': 'Your rent gets paid automatically on time',
+    },
+    
+    {
+      'imageUrl': 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
+      'title': 'Get rewards',
+      'subtitle': 'Earn points, miles, or cashback everytime you pay rent',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -648,7 +671,7 @@ class PaymentBenefitsSection extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isMobile = constraints.maxWidth < 700;
-            
+
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               width: isMobile ? null : 1200,
@@ -694,59 +717,66 @@ class PaymentBenefitsSection extends StatelessWidget {
   }
 
   Widget _buildMobileLayout() {
-    return Column(
-      children: [
-        _buildBenefitCard(
-          delay: 0.4,
-          imageUrl: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Cash flow Freedom',
-          subtitle: 'Keep more of your cash every month',
-        ),
-        const SizedBox(height: 30),
-        _buildBenefitCard(
-          delay: 0.5,
-          imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Set it and forget it',
-          subtitle: 'Your rent gets paid automatically on time',
-        ),
-        const SizedBox(height: 30),
-        _buildBenefitCard(
-          delay: 0.6,
-          imageUrl: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Get rewards',
-          subtitle: 'Earn points, miles, or cashback everytime you pay rent',
-        ),
-      ],
+    return CarouselSlider.builder(
+      itemCount: _benefitCardsData.length,
+      itemBuilder: (BuildContext context, int index, int realIndex) {
+        final data = _benefitCardsData[index];
+        double delay = 0.4 + (index * 0.1);
+        return _buildBenefitCard(
+          delay: delay,
+          imageUrl: data['imageUrl']!,
+          title: data['title']!,
+          subtitle: data['subtitle']!,
+        );
+      },
+      options: CarouselOptions(
+        height: 480,
+        viewportFraction: 0.85,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 5),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        scrollDirection: Axis.horizontal,
+        pageSnapping: true,
+        aspectRatio: 16 / 9,
+      ),
     );
   }
+Widget _buildDesktopLayout() {
+  return CarouselSlider.builder(
+    itemCount: _benefitCardsData.length,
+    itemBuilder: (BuildContext context, int index, int realIndex) {
+      final data = _benefitCardsData[index];
+      double delay = 0.4 + (index * 0.1);
+      return _buildBenefitCard(
+        delay: delay,
+        imageUrl: data['imageUrl']!,
+        title: data['title']!,
+        subtitle: data['subtitle']!,
+      );
+    },
+    options: CarouselOptions(
+      height: 480,
+      viewportFraction: 0.33,
+      initialPage: 0,
+      enableInfiniteScroll: true,
+      reverse: false,
+      autoPlay: true,
+      autoPlayInterval: const Duration(seconds: 5),
+      autoPlayAnimationDuration: const Duration(milliseconds: 800),
+      autoPlayCurve: Curves.fastOutSlowIn,
+      enlargeCenterPage: true,
+      scrollDirection: Axis.horizontal,
+      pageSnapping: true,
+      aspectRatio: 16 / 9,
+    ),
+  );
+}
 
-  Widget _buildDesktopLayout() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildBenefitCard(
-          delay: 0.4,
-          imageUrl: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Cash flow Freedom',
-          subtitle: 'Keep more of your cash every month',
-        ),
-        const SizedBox(width: 30),
-        _buildBenefitCard(
-          delay: 0.5,
-          imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Set it and forget it',
-          subtitle: 'Your rent gets paid automatically on time',
-        ),
-        const SizedBox(width: 30),
-        _buildBenefitCard(
-          delay: 0.6,
-          imageUrl: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
-          title: 'Get rewards',
-          subtitle: 'Earn points, miles, or cashback everytime you pay rent',
-        ),
-      ],
-    );
-  }
 
   Widget _buildBenefitCard({
     required double delay,
@@ -1319,4 +1349,4 @@ class ScaleAnimation extends StatelessWidget {
       child: child,
     );
   }
-}                                                                                                                               
+}
